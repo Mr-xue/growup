@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    window.$docsify = {
+      name: '',
+      repo: '',
+      loadSidebar:true,  //开启侧栏，读取 _sidebar.md
+      // loadNavbar:true,  //开启顶部导航，读取 _navbar.md
+      coverpage: true, //开启封面，读取 _coverpage.md
+      subMaxLevel: 2,  //开启二级菜单
+      // 避免不必要的回退
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
+      repo: 'docsifyjs/docsify', //渲染右上角github挂件
+      maxLevel: 4
+    }
+  </script>
+  <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+</body>
+</html>
