@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Docs</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -23,9 +23,16 @@
         '/.*/_sidebar.md': '/_sidebar.md'
       },
       repo: 'https://github.com/Mr-xue/growup.git', //渲染右上角github挂件
-      maxLevel: 2,
+      maxLevel: 2, //默认情况下会抓取文档中所有标题渲染成目录，可配置最大支持渲染的标题层级
+      name: 'Hi, look here~', //设置侧栏顶部文字
+      autoHeader: true,
+      formatUpdated: '{YYYY}/{MM}/{DD} {HH}:{mm}', //可使用{docsify-updated}显示格式化后的时间
+      search: 'auto', // 开启全文搜索
     }
   </script>
+
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+  <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>  <!-- 搜索插件 -->
+  <script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script> <!-- 开启图片缩放 -->
 </body>
 </html>
