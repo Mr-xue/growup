@@ -11,6 +11,10 @@
 <body>
   <div id="app"></div>
   <script>
+    //pwa离线模式
+    if (typeof navigator.serviceWorker !== 'undefined') {
+      navigator.serviceWorker.register('sw.js')
+    }
     window.$docsify = {
       name: '',
       repo: '',
@@ -29,8 +33,8 @@
       formatUpdated: '{YYYY}/{MM}/{DD} {HH}:{mm}', //可使用{docsify-updated}显示格式化后的时间
       search: 'auto', // 开启全文搜索
     }
-  </script>
 
+  </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
   <script src="//unpkg.com/docsify/lib/plugins/search.js"></script>  <!-- 搜索插件 -->
   <script src="//unpkg.com/docsify/lib/plugins/zoom-image.js"></script> <!-- 开启图片缩放 -->
