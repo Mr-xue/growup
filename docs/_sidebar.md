@@ -1,10 +1,10 @@
 * [首页]()
  
-* HTML、CSS相关
+* HTML+CSS
 
-* JS相关
+* JavaScript
   * [对象深克隆](teach/js/object)
 
-* 构建工具
+* Webpack
 
 * 杂七杂八
