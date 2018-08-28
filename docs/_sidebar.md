@@ -1,5 +1,3 @@
-* [首页]()
-
 * HTML+CSS
 
 * JavaScript
