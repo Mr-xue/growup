@@ -44,7 +44,7 @@ function deepClone(obj){
     let newObj = obj instanceof Array ? [] : {};
     for (let i in obj) {
         if (obj.hasOwnProperty(i)) {
-            newObj[i] = typeof obj[i] == 'object' ? this.deepClone(obj[i]) : obj[i];
+            newObj[i] = typeof obj[i] == 'object' ? deepClone(obj[i]) : obj[i];
         }
     }
     return newObj;
