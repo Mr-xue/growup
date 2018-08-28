@@ -43,6 +43,7 @@
 function deepClone(obj){
     let newObj = obj instanceof Array ? [] : {};
     for (let i in obj) {
+    	//判断属性是否从原型中继承而来
         if (obj.hasOwnProperty(i)) {
             newObj[i] = typeof obj[i] == 'object' ? deepClone(obj[i]) : obj[i];
         }
