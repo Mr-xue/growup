@@ -65,7 +65,7 @@ Person.prototype.name = 'Luffy';
 let person1 = new Person('DingDang');
 
 console.log(person1.__proto__); //person { name: 'Luffy' }
-console.log(person.__proto__);  //[Function]
+console.log(Person.__proto__);  //[Function]
 
 ```
 
