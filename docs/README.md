@@ -1,5 +1,7 @@
 # 关于此博客
 
+[![Gitter](https://badges.gitter.im/xuexiansheng/Lobby.svg)](https://gitter.im/xuexiansheng/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 > 开博时间：2018/08/24
 
 > 基于Github + Docsify搭建

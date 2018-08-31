@@ -87,7 +87,7 @@ console.log(Person.__proto__);  //[Function]
 
 1.构造函数`Foo()`
 
-- 构造函数`Foo`的原型属性`prototype`指向了它的原型对象`Foo.prototype`。原型对象`Foo.protoype`中有默认属性`constructor`指向了原函数`Foo`。
+- 构造函数`Foo`的原型属性`prototype`指向了它的原型对象`Foo.prototype`。原型对象`Foo.prototype`中有默认属性`constructor`指向了原函数`Foo`。
 
 - 构造函数`Foo`创建的实例`f1,f2`的`__proto__`指向了其构造函数的原型对象`Foo.prototype`，所以`Foo`的所有实例都可以共享其原型对象的属性。
 
