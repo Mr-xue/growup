@@ -153,6 +153,40 @@ AsyncStorage：`yarn add @react-native-async-storage/async-storage`
 
 
 
+### 6.配置极光社交分享
+
+[配置文档](https://github.com/jpush/jshare-react-native#manually-configure-part)
+
+1.安卓以下报错解决方案
+
+```java
+.../android/app/build/generated/rncli/src/main/java/com/facebook/react/PackageList.java:79: error: constructor JSharePackage in class JSharePackage cannot be applied to given types;
+      new JSharePackage(),
+      ^
+  required: boolean,boolean
+  found: no arguments
+  reason: actual and formal argument lists differ in length
+1 error
+    
+```
+
+Fix方案
+
+在`node_modules/jshare-react-native/android/src/main/java/..../JsharePackage.java`文件中添加如下代码
+
+```java
+public JSharePackage() {
+Logger.SHUTDOWNTOAST = false;
+Logger.SHUTDOWNLOG = false;
+}
+```
+
+2.安卓配置分享平台id和key
+
+`项目目录/android/app/assets/JGShareSDK.xml`
+
+
+
 ## 二、技术点
 
 ### 1.判断ios全面屏
