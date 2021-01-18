@@ -6,106 +6,105 @@
 
 ### 1.安装react-navigation 4.x
 
-1.安装核心组件及用到的组件库
+- 安装核心组件及用到的组件库
 
-```javascript
-//安装核心库
-yarn add react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+  ```sh
+  //安装核心库
+  $ yarn add react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+  
+  //根据需要引入各导航组件库
+  $ yarn add react-navigation-stack
+  $ yarn add react-navigation-drawer
+  $ yarn add react-navigation-tabs
+  ```
 
-//根据需要引入各导航组件库
-yarn add react-navigation-stack
-yarn add react-navigation-drawer
-yarn add react-navigation-tabs
-```
+  > React Native 0.60以上会自动link包，反之需要手动link
 
-> React Native 0.60以上会自动link包，反之需要手动link
+- ios目录下执行 `pod install`
 
+- 为react-native-screens添加相关依赖
 
+- 为了在Android上完成安装，还需要在`android/app/build.gradle`中为`react-native-screens`添加相关依赖
 
-2.ios目录下执行 `pod install`
+  ```java
+  implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+  implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+  ```
 
-3.为react-native-screens添加相关依赖
+- 配置react-native-gesture-handler
 
-为了在Android上完成安装，还需要在`android/app/build.gradle`中为`react-native-screens`添加相关依赖
+  为了在Android上能够使用react-native-gesture-handler，需要修改MainActivity.java(加号部分为新增代码)
 
-```java
-implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-```
-
-4.配置react-native-gesture-handler
-
-为了在Android上能够使用react-native-gesture-handler，需要修改MainActivity.java(加号部分为新增代码)
-
-```java
-package com.reactnavigation.example;
-
-import com.facebook.react.ReactActivity;
-+ import com.facebook.react.ReactActivityDelegate;
-+ import com.facebook.react.ReactRootView;
-+ import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
-public class MainActivity extends ReactActivity {
-
-  @Override
-  protected String getMainComponentName() {
-    return "Example";
+  ```java
+  package com.reactnavigation.example;
+  
+  import com.facebook.react.ReactActivity;
+  + import com.facebook.react.ReactActivityDelegate;
+  + import com.facebook.react.ReactRootView;
+  + import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
+  public class MainActivity extends ReactActivity {
+  
+    @Override
+    protected String getMainComponentName() {
+      return "Example";
+    }
+  +  @Override
+  +  protected ReactActivityDelegate createReactActivityDelegate() {
+  +    return new ReactActivityDelegate(this, getMainComponentName()) {
+  +      @Override
+  +      protected ReactRootView createRootView() {
+  +        return new RNGestureHandlerEnabledRootView(MainActivity.this);
+  +      }
+  +    };
+  +  }
   }
-+  @Override
-+  protected ReactActivityDelegate createReactActivityDelegate() {
-+    return new ReactActivityDelegate(this, getMainComponentName()) {
-+      @Override
-+      protected ReactRootView createRootView() {
-+        return new RNGestureHandlerEnabledRootView(MainActivity.this);
-+      }
-+    };
-+  }
-}
-```
+  ```
 
-5.在`index.js` or `App.js`中导入`react-native-gesture-handler`
+  
+
+- 在`index.js` or `App.js`中导入`react-native-gesture-handler`
 
 
 
 ### 2.配置redux
 
-1.安装redux：`yarn add redux react-redux redux-thunk`
+- 安装redux：`yarn add redux react-redux redux-thunk`
 
-2.使用以下代码覆盖App.js，AppNavigators存放的是路由配置代码
+- 使用以下代码覆盖App.js，AppNavigators存放的是路由配置代码
 
-```javascript
-import React, {Component} from 'react';
-import {Provider} from 'react-redux';
-import AppNavigators from './navigator/AppNavigators';
-import store from './store';
-
-class App extends Component {
-  render() {
-    /**
-     * 将store传递给App框架
-     */
-    return (
-      <Provider store={store}>
-        <AppNavigators />
-      </Provider>
-    );
+  ```javascript
+  import React, {Component} from 'react';
+  import {Provider} from 'react-redux';
+  import AppNavigators from './navigator/AppNavigators';
+  import store from './store';
+  
+  class App extends Component {
+    render() {
+      /**
+       * 将store传递给App框架
+       */
+      return (
+        <Provider store={store}>
+          <AppNavigators />
+        </Provider>
+      );
+    }
   }
-}
+  
+  export default App;
+  ```
 
-export default App;
-
-```
-
-
+  
 
 ### 3.配置icon图标库
 
-1.安装 `yarn add react-native-vector-icons`
+- 安装 `yarn add react-native-vector-icons`
 
-2.配置ios
+- 配置ios
 
-- ios目录下的info.plist添加以下代码
+  ios目录下的info.plist添加以下代码
 
-  ```swift
+  ```xml
   <key>UIAppFonts</key>
   <array>
     <string>AntDesign.ttf</string>
@@ -127,21 +126,25 @@ export default App;
   </array>
   ```
 
+  
+
 - ios目录下执行pod install
 
   
 
-3.配置android
+- 配置android
 
-- 编辑 `android/app/build.gradle`文件，增加以下代码
+  编辑 `android/app/build.gradle`文件，增加以下代码
 
   ```java
   apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
   ```
 
-
+  
 
 ### 4.本地存储AsyncStorage
+
+原官方api已废弃，建议使用以下扩展
 
 AsyncStorage：`yarn add @react-native-async-storage/async-storage`
 
@@ -155,37 +158,38 @@ AsyncStorage：`yarn add @react-native-async-storage/async-storage`
 
 ### 6.配置极光社交分享
 
-[配置文档](https://github.com/jpush/jshare-react-native#manually-configure-part)
+[官方配置文档](https://github.com/jpush/jshare-react-native#manually-configure-part)
 
-1.安卓以下报错解决方案
+- 安卓以下报错解决方案
 
-```java
-.../android/app/build/generated/rncli/src/main/java/com/facebook/react/PackageList.java:79: error: constructor JSharePackage in class JSharePackage cannot be applied to given types;
-      new JSharePackage(),
-      ^
-  required: boolean,boolean
-  found: no arguments
-  reason: actual and formal argument lists differ in length
-1 error
-    
-```
+  ```java
+  .../android/app/build/generated/rncli/src/main/java/com/facebook/react/PackageList.java:79: error: constructor JSharePackage in class JSharePackage cannot be applied to given types;
+        new JSharePackage(),
+        ^
+    required: boolean,boolean
+    found: no arguments
+    reason: actual and formal argument lists differ in length
+  1 error
+  ```
 
-Fix方案
+  Fix方案
 
-在`node_modules/jshare-react-native/android/src/main/java/..../JsharePackage.java`文件中添加如下代码
+  在`node_modules/jshare-react-native/android/src/main/java/..../JsharePackage.java`文件中添加如下代码
 
-```java
-public JSharePackage() {
-Logger.SHUTDOWNTOAST = false;
-Logger.SHUTDOWNLOG = false;
-}
-```
+  ```java
+  public JSharePackage() {
+  	Logger.SHUTDOWNTOAST = false;
+  	Logger.SHUTDOWNLOG = false;
+  }
+  ```
 
-同时不需要在`project/android/app/src…/MainApplication.java`文件中添加 new JSharePackage(xx,xx)
+  同时不需要在 `项目目录/android/app/src…/MainApplication.java`文件中添加 new JSharePackage(xx,xx)
 
-2.安卓配置分享平台id和key
 
-`项目目录/android/app/assets/JGShareSDK.xml`
+
+- 安卓配置分享平台id和key
+
+  `项目目录/android/app/assets/JGShareSDK.xml`
 
 
 
@@ -245,7 +249,7 @@ const icon = this.props.active
 >
 > [参考整理](https://www.jianshu.com/p/84307d3aa824)  [参考整理2](https://blog.csdn.net/qq_42076140/article/details/90408047)
 >
-> 目前https://codepush.appcenter.ms/被墙，无法正常更新
+> 目前https://codepush.appcenter.ms/服务被墙，可能导致热更新失败
 
 #### 1.项目配置
 
@@ -316,7 +320,7 @@ const icon = this.props.active
 
 
 
-##### 1-2.客户端配置
+##### 1-2.IOS、安卓端配置
 
 安装依赖包：`yarn add react-native-code-push`
 
@@ -333,6 +337,8 @@ const icon = this.props.active
   ```objective-c
   #import <CodePush/CodePush.h>
   ```
+
+  
 
 - 找到以下代码，进行替换
 
@@ -352,6 +358,10 @@ const icon = this.props.active
   ```
 
   
+
+- 修改版本号versionName（设置成1.0.0）
+
+  ![](https://gitee.com/thelife/pic-oss/raw/master/pic/2021-01-18-7450593-b5f2026cbb424a8f.png)
 
 
 
@@ -413,6 +423,30 @@ const icon = this.props.active
 
 - 在 `strings.xml`文件中新增部署的key
 
+  ```xml
+  <string moduleConfig="true" name="CodePushDeploymentKey">真实的key</string>
+  
+  <!-- 查看部署的key-->
+  appcenter codepush deployment list -a <ownerName>/<appName> <deploymentName> -k
+  例：appcenter codepush deployment list -a xuechongwei-hotmail.com/HbAppBaby-ios -k
+  ```
+
+
+
+- 修改版本号versionName
+
+  在 android/app/build.gradle中有个 android.defaultConfig.versionName属性，我们需要把 应用版本改成 1.0.0（默认是1.0，但是codepush需要三位数）
+
+  ```java
+  android{
+      defaultConfig{
+          versionName "1.0.0"
+      }
+  }
+  ```
+
+  
+
 #### 2.常用命令
 
 旧版code push命令
@@ -445,11 +479,13 @@ $ code-push deployment ls [APP_NAME] -k
 //查看创建app列表
 $ appcenter apps list
 
-//查看部署码
+//查看部署key
 $ appcenter codepush deployment list -a <ownerName>/<appName> <deploymentName> -k
 例：appcenter codepush deployment list -a xuechongwei-hotmail.com/HbAppBaby-ios -k
 
-//====== 推送命令 ======
+
+// ↓↓↓ 推送命令 ↓↓↓
+
 //  在默认情况下，更新会推送到Staging的部署
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-ios
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-android
@@ -457,6 +493,8 @@ $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-android
 //  指定版本更新 -d 加部署名
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-ios -d Production
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-android -d Production
+
+// ↑↑↑ 推送命令 ↑↑↑
 
 // 设置更新日志，供前端读取
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-ios  --description '更新'
@@ -466,7 +504,7 @@ $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-android 
 //多了个-m true 参数，强制更新的默认效果是，用弹窗确认更新时候，只有确认键，并且安装成功后是立即生效，所以app可能会闪一下。
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/splashExample-ios -m true  --description '更新'
 
-//常看更新历史
+//查看更新历史
 $ appcenter codepush deployment history -a <ownerName>/<appName> <deploymentName>
 
 // 显示历史
@@ -494,16 +532,29 @@ import {name as appName} from './app.json';
 
 ```
 
+#### 4.部署code-push-server
 
+微软云服务在中国太慢，并且部分服务被墙，导致无法正常热更新，建议自部署更新服务器。[参考文档](https://github.com/lisong/code-push-server)
 
 ## 四、常见问题
 
 #### 1.安卓依赖项解析错误
 
-![1](https://gitee.com/thelife/pic-oss/raw/master/pic/2021-01-07-1.png)
+![](https://gitee.com/thelife/pic-oss/raw/master/pic/2021-01-07-1.png)
 
 
 
 #### 2.ios依赖解析错误
 
 尝试切到ios目录下执行 pod install
+
+#### 3.打包安卓和ios安装包
+
+打包安卓：[参考地址](https://blog.csdn.net/CC1991_/article/details/103285684)
+
+打包iOS：[参考地址](https://www.devio.org/2020/03/15/React-Native-releases-packaged-iOS-apps-for-apps/)
+
+- ios打包注意事项
+
+  通过Product -> Archive 进行归档打包，打包后通过 Window -> Organizer打开归档结果页进行导出
+
