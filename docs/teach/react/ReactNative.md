@@ -6,9 +6,14 @@
 
 ### 1.安装react-navigation 4.x
 
+#### 1-1.路由的安装配置
+
 - 安装核心组件及用到的组件库
 
   ```sh
+  //安装主库
+  $ yarn add react-navigation
+  
   //安装核心库
   $ yarn add react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
   
@@ -24,12 +29,14 @@
 
 - 为react-native-screens添加相关依赖
 
-- 为了在Android上完成安装，还需要在`android/app/build.gradle`中为`react-native-screens`添加相关依赖
+  - 为了在Android上完成安装，还需要在`android/app/build.gradle`中为`react-native-screens`添加相关依赖
 
-  ```java
-  implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
-  implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
-  ```
+    ```java
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+    ```
+
+    
 
 - 配置react-native-gesture-handler
 
@@ -62,9 +69,14 @@
 
   
 
-- 在`index.js` or `App.js`中导入`react-native-gesture-handler`
+- 在`index.js`中导入`react-native-gesture-handler`
 
 
+
+#### 1-2.获取路由参数的两种方式
+
+- `this.props.navigation.state.params`获取的是整个参数对象
+- `this.props.navigation.getParam('参数名')`通过key获取参数
 
 ### 2.配置redux
 
@@ -193,55 +205,7 @@ AsyncStorage：`yarn add @react-native-async-storage/async-storage`
 
 
 
-## 二、技术点
-
-### 1.判断ios全面屏
-
-`DeviceInfo.hasNotch()`
-
-### 2.导航层级无法跳转问题
-
-- 路由跳转提取到NavigatorUtil.js
-
-  在HomePage主入口文件的render方法中加入 `NavigationUtil.navigation = this.props.navigation;`
-
-  需调用对应页面的navigation
-
-### 3.iOS边框圆角的注意事项
-
-请注意下列边框圆角样式目前在 iOS 的图片组件上还不支持：
-
-- `borderTopLeftRadius`
-- `borderTopRightRadius`
-- `borderBottomLeftRadius`
-- `borderBottomRightRadius`
-
-### 4.图片url需为静态字符串
-
-为了使新的图片资源机制正常工作，require 中的图片名字必须是一个静态字符串（不能使用变量！因为 require 是在编译时期执行，而非运行时期执行！）。[参考地址](https://www.react-native.cn/docs/images)
-
-```react
-// 正确
-<Image source={require("./my-icon.png")} />;
-
-// 错误
-const icon = this.props.active ? "my-icon-active" : "my-icon-inactive";
-<Image source={require("./" + icon + ".png")} />;
-
-// 正确
-const icon = this.props.active
-  ? require("./my-icon-active.png")
-  : require("./my-icon-inactive.png");
-<Image source={icon} />;
-```
-
-### 5.判断开发环境
-
-通过全局变量`__DEV__`判断开发环境
-
-
-
-## 三、Code Push热更新相关
+## 二、Code Push热更新
 
 > App Center CLI [官方文档](https://docs.microsoft.com/en-us/appcenter/distribution/codepush/cli)
 >
@@ -410,15 +374,6 @@ const icon = this.props.active
   }
   ```
 
-  ```java
-  protected List<ReactPackage> getPackages() {
-    @SuppressWarnings("UnnecessaryLocalVariable")
-    List<ReactPackage> packages = new PackageList(this).getPackages();
-    packages.add(new CodePush('HUxTmz9vkYnDIwO3eOwo2Bzfe2yvPRpVYolKL',getApplicationContext(),BuildConfig.DEBUG));
-    return packages;
-  }
-  ```
-
 
 
 - 在 `strings.xml`文件中新增部署的key
@@ -428,14 +383,14 @@ const icon = this.props.active
   
   <!-- 查看部署的key-->
   appcenter codepush deployment list -a <ownerName>/<appName> <deploymentName> -k
-  例：appcenter codepush deployment list -a xuechongwei-hotmail.com/HbAppBaby-ios -k
+  例：appcenter codepush deployment list -a xuechongwei-hotmail.com/HbAppBaby-android -k
   ```
 
 
 
 - 修改版本号versionName
 
-  在 android/app/build.gradle中有个 android.defaultConfig.versionName属性，我们需要把 应用版本改成 1.0.0（默认是1.0，但是codepush需要三位数）
+  打开`android/app/build.gradle`,搜索 `defaultConfig`定位到以下代码，修改`versionName`为 1.0.0（默认是1.0，codepush需要三位数）
 
   ```java
   android{
@@ -476,39 +431,30 @@ $ code-push deployment ls [APP_NAME] -k
 
 
 ```sh
-//查看创建app列表
+// 查看创建app列表
 $ appcenter apps list
 
-//查看部署key
+// 查看部署key
 $ appcenter codepush deployment list -a <ownerName>/<appName> <deploymentName> -k
 例：appcenter codepush deployment list -a xuechongwei-hotmail.com/HbAppBaby-ios -k
 
-
-// ↓↓↓ 推送命令 ↓↓↓
-
-//  在默认情况下，更新会推送到Staging的部署
-$ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-ios
-$ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-android
-
-//  指定版本更新 -d 加部署名
-$ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-ios -d Production
-$ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-android -d Production
-
-// ↑↑↑ 推送命令 ↑↑↑
+// 发布新版本：在默认情况下，更新会推送到Staging的部署。
+// 指定版本: -t 版本号  -d 要部署的环境
+$ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-ios -d Production -t 1.0.0 --description '更新内容'
 
 // 设置更新日志，供前端读取
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-ios  --description '更新'
-$ appcenter codepush release-react -a xuechongwei-hotmail.com/HbAppBaby-android  --description '更新'
 
-//强制更新
-//多了个-m true 参数，强制更新的默认效果是，用弹窗确认更新时候，只有确认键，并且安装成功后是立即生效，所以app可能会闪一下。
+// 强制更新
+// 多了个-m true 参数，强制更新的默认效果是，用弹窗确认更新时候，只有确认键，并且安装成功后是立即生效，所以app可能会闪一下。
 $ appcenter codepush release-react -a xuechongwei-hotmail.com/splashExample-ios -m true  --description '更新'
 
-//查看更新历史
+// 查看更新历史
 $ appcenter codepush deployment history -a <ownerName>/<appName> <deploymentName>
 
 // 显示历史
 $ appcenter codepush deployment history -a xuechongwei-hotmail.com/HbAppBaby-ios Staging
+
 // 清空历史
 $ appcenter codepush deployment clear Staging -a xuechongwei-hotmail.com/HbAppBaby-ios
 ```
@@ -522,10 +468,10 @@ $ appcenter codepush deployment clear Staging -a xuechongwei-hotmail.com/HbAppBa
 import {AppRegistry} from 'react-native';
 import CodePush from "react-native-code-push";
 // 静默方式，app每次启动的时候，都检测一下更新 'ON_APP_RESUME'
-// const codePushOptions = { checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME };
+const codePushOptions = { checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME };
  
 // 手动方式接收更新的方式
-const codePushOptions = { checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME };
+//const codePushOptions = { checkFrequency: CodePush.CheckFrequency.ON_APP_RESUME };
 import _App from './App';
 const App = CodePush(codePushOptions)(_App);
 import {name as appName} from './app.json';
@@ -536,9 +482,78 @@ import {name as appName} from './app.json';
 
 微软云服务在中国太慢，并且部分服务被墙，导致无法正常热更新，建议自部署更新服务器。[参考文档](https://github.com/lisong/code-push-server)
 
+
+
+
+
+## 三、技术点
+
+### 1.判断ios全面屏
+
+- 官方DeviceInfo即将废弃，目前可以使用:`DeviceInfo.isIPhoneX_deprecated`进行判断
+
+- 后续可通过安装扩展:`react-native-device-info` 通过`DeviceInfo.hasNotch()`判断
+- 用屏幕的长宽比判断 长度比宽度的值 大于1.8是全面屏
+
+### 2.导航层级无法跳转问题
+
+- 路由跳转提取到NavigatorUtil.js
+
+  在HomePage主入口文件的render方法中加入 `NavigationUtil.navigation = this.props.navigation;`
+
+  需调用对应页面的navigation
+
+### 3.iOS边框圆角的注意事项
+
+请注意下列边框圆角样式目前在 iOS 的图片组件上还不支持：
+
+- `borderTopLeftRadius`
+- `borderTopRightRadius`
+- `borderBottomLeftRadius`
+- `borderBottomRightRadius`
+
+### 4.图片url需为静态字符串
+
+为了使新的图片资源机制正常工作，require 中的图片名字必须是一个静态字符串（不能使用变量！因为 require 是在编译时期执行，而非运行时期执行！）。[参考地址](https://www.react-native.cn/docs/images)
+
+```react
+// 正确
+<Image source={require("./my-icon.png")} />;
+
+// 错误
+const icon = this.props.active ? "my-icon-active" : "my-icon-inactive";
+<Image source={require("./" + icon + ".png")} />;
+
+// 正确
+const icon = this.props.active
+  ? require("./my-icon-active.png")
+  : require("./my-icon-inactive.png");
+<Image source={icon} />;
+```
+
+### 5.判断开发环境
+
+通过全局变量`__DEV__`判断开发环境
+
+
+
+### 6.打包安卓和ios安装包
+
+打包安卓：[参考地址](https://blog.csdn.net/CC1991_/article/details/103285684)
+
+打包iOS：[参考地址](https://www.devio.org/2020/03/15/React-Native-releases-packaged-iOS-apps-for-apps/)
+
+- ios证书申请 [参考地址](https://www.jianshu.com/p/e72b3e91afca)
+
+- ios打包注意事项
+
+  通过Product -> Archive 进行归档打包，打包后通过 Window -> Organizer打开归档结果页进行导出
+
+
+
 ## 四、常见问题
 
-#### 1.安卓依赖项解析错误
+#### 1.多个依赖安卓解析冲突
 
 ![](https://gitee.com/thelife/pic-oss/raw/master/pic/2021-01-07-1.png)
 
@@ -548,13 +563,9 @@ import {name as appName} from './app.json';
 
 尝试切到ios目录下执行 pod install
 
-#### 3.打包安卓和ios安装包
+#### 3.模拟器错误弹窗不消失
 
-打包安卓：[参考地址](https://blog.csdn.net/CC1991_/article/details/103285684)
+有时候因代码错误导致模拟器错误弹窗，还原代码后，错误弹窗依旧存在。可尝试以下方法：
 
-打包iOS：[参考地址](https://www.devio.org/2020/03/15/React-Native-releases-packaged-iOS-apps-for-apps/)
-
-- ios打包注意事项
-
-  通过Product -> Archive 进行归档打包，打包后通过 Window -> Organizer打开归档结果页进行导出
-
+- 关闭所有终端窗口
+- 项目根目录启动终端，运行 `yarn cache clean`,然后再启动项目
