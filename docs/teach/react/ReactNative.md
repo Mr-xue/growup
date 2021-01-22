@@ -215,9 +215,9 @@ AsyncStorage：`yarn add @react-native-async-storage/async-storage`
 >
 > 目前https://codepush.appcenter.ms/服务被墙，可能导致热更新失败
 
-#### 1.项目配置
+### 1.项目配置
 
-##### 1-1.服务端配置
+#### 1-1.服务端配置
 
 - 安装`App Center CLI`，用于服务端信息管理
 
@@ -284,7 +284,7 @@ AsyncStorage：`yarn add @react-native-async-storage/async-storage`
 
 
 
-##### 1-2.IOS、安卓端配置
+#### 1-2.IOS、安卓端配置
 
 安装依赖包：`yarn add react-native-code-push`
 
@@ -402,7 +402,7 @@ AsyncStorage：`yarn add @react-native-async-storage/async-storage`
 
   
 
-#### 2.常用命令
+### 2.常用命令
 
 旧版code push命令
 
@@ -461,7 +461,7 @@ $ appcenter codepush deployment clear Staging -a xuechongwei-hotmail.com/HbAppBa
 
 
 
-#### 3.配置更新方式
+### 3.配置更新方式
 
 ```javascript
 
@@ -478,7 +478,7 @@ import {name as appName} from './app.json';
 
 ```
 
-#### 4.部署code-push-server
+### 4.部署code-push-server
 
 微软云服务在中国太慢，并且部分服务被墙，导致无法正常热更新，建议自部署更新服务器。[参考文档](https://github.com/lisong/code-push-server)
 
@@ -503,7 +503,7 @@ import {name as appName} from './app.json';
 
   需调用对应页面的navigation
 
-### 3.iOS边框圆角的注意事项
+### 3.iOS边框圆角注意事项
 
 请注意下列边框圆角样式目前在 iOS 的图片组件上还不支持：
 
@@ -551,21 +551,100 @@ const icon = this.props.active
 
 
 
+### 7.检测手机系统版本
+
+```javascript
+import { Platform } from "react-native";
+
+//在 Android 上，Version属性是一个数字，表示 Android 的 api level：
+if (Platform.Version === 25) {
+  console.log("Running on Nougat!");
+}
+
+//在 iOS 上，Version属性是-[UIDevice systemVersion]的返回值，具体形式为一个表示当前系统版本的字符串。比如可能是"10.3"。
+const majorVersionIOS = parseInt(Platform.Version, 10);
+if (majorVersionIOS <= 9) {
+  console.log("Work around a change in behavior");
+}
+```
+
+
+
+### 8.屏幕适配
+
+1.简单的单位转换
+
+以750宽度的设计稿为例：
+
+如果要让750代表RN设备的宽度，可以这样设计你的代码：
+
+```react
+const viewPortWidth = 750;//这里是设计稿的宽度
+const px2dp = (px: number): number => {
+    return px * Dimensions.get('window').width / viewPortWidth
+}
+ 
+<View style={{height:200,width:px2dp(750),backgroundColor:'yellow'}}>
+	<Text>750</Text>
+</View>
+```
+
+
+
+2.第三方库 [参考地址1](https://bingoootang.github.io/blog/2018/08/31/react-native-adaptive/)  [参考地址2](https://juejin.cn/post/6844903662188396551)
+
+建议使用以下库： [Github地址](https://github.com/bingoootang/react-native-adaptive-stylesheet#readme)
+
+```react
+//安装
+yarn add react-native-adaptive-stylesheet
+
+//引入
+import StyleSheet from 'react-native-adaptive-stylesheet';
+StyleSheet.setGuidelineBaseWidth(750); //设置基准尺寸
+
+//全局配置
+StyleSheet.configure({
+  width: 375,
+  scaleFont: true,
+});
+
+//在视图层直接使用
+<View style={{ width: StyleSheet.scaleView(60) }}>
+  <Text style={{ fontSize: StyleSheet.scaleFont(18) }}>This is am example!</Text>
+</View>
+
+//定义样式与原本用法相同
+StyleSheet.create({
+  container: {
+    width: 375,
+    borderWidth: StyleSheet.hairlineWidth,
+    fontSize: 18,
+  },
+});
+```
+
+
+
 ## 四、常见问题
 
-#### 1.多个依赖安卓解析冲突
+### 1.多个依赖安卓解析冲突
 
 ![](https://gitee.com/thelife/pic-oss/raw/master/pic/2021-01-07-1.png)
 
 
 
-#### 2.ios依赖解析错误
+### 2.ios依赖解析错误
 
 尝试切到ios目录下执行 pod install
 
-#### 3.模拟器错误弹窗不消失
+### 3.模拟器错误弹窗不消失
 
 有时候因代码错误导致模拟器错误弹窗，还原代码后，错误弹窗依旧存在。可尝试以下方法：
 
 - 关闭所有终端窗口
 - 项目根目录启动终端，运行 `yarn cache clean`,然后再启动项目
+
+### 4.TextInput文字显示不全
+
+安卓下存在的问题，添加样式 `paddingVertical: 0`
