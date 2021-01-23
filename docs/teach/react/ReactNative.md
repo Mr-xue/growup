@@ -626,6 +626,22 @@ StyleSheet.create({
 
 
 
+### 9.将安卓的路由切换效果设置为ios模式
+
+[react-navigation4.X 参考文档](https://reactnavigation.org/docs/stack-navigator/#transitionpresets)
+
+```react
+import { TransitionPresets } from 'react-navigation-stack';
+{
+    initialRouteName: 'Index',
+    defaultNavigationOptions: {
+      ...TransitionPresets.SlideFromRightIOS,
+    },
+}
+```
+
+
+
 ## 四、常见问题
 
 ### 1.多个依赖安卓解析冲突
