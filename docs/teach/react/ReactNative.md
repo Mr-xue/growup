@@ -664,3 +664,8 @@ import { TransitionPresets } from 'react-navigation-stack';
 ### 4.TextInput文字显示不全
 
 安卓下存在的问题，添加样式 `paddingVertical: 0`
+
+### 5.如何调试http请求
+
+> 注意：使用 Chrome 调试目前无法观测到 React Native 中的网络请求，你可以使用第三方的[react-native-debugger](https://github.com/jhen0409/react-native-debugger)来进行观测。
+
