@@ -633,6 +633,10 @@ StyleSheet.create({
 ```react
 import { TransitionPresets } from 'react-navigation-stack';
 {
+  //路由配置
+  ...
+},
+{
     initialRouteName: 'Index',
     defaultNavigationOptions: {
       ...TransitionPresets.SlideFromRightIOS,
@@ -641,6 +645,29 @@ import { TransitionPresets } from 'react-navigation-stack';
 ```
 
 
+
+### 10.获取元素位置尺寸
+
+```react
+<View ref={(filter) => (this.filter = filter)}></View>
+
+this.filter && this.filter.measure((x, y, width, height, left, top) => {
+  console.log('===x===', x); //组件相对父布局的X坐标??
+  console.log('===y===', y); //组件相对父布局的Y坐标??
+  console.log('===width===', width); //组件的宽度
+  console.log('===height===', height); //组件的高度
+  console.log('===left===', left); //组件在屏幕中的X坐标
+  console.log('===top===', top); //组件在屏幕中的Y坐标
+});
+```
+
+
+
+### 11.动画教程
+
+[官方文档](https://www.react-native.cn/docs/animated)
+
+[简书](https://www.jianshu.com/p/7fd37d8ed138)
 
 ## 四、常见问题
 
